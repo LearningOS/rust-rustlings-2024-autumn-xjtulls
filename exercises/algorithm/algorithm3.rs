@@ -3,10 +3,22 @@
 	This problem requires you to implement a sorting algorithm
 	you can use bubble sorting, insertion sorting, heap sorting, etc.
 */
-// I AM NOT DONE
 
-fn sort<T>(array: &mut [T]){
-	//TODO
+fn sort<T>(array: &mut [T])
+where T : Ord + Clone
+{
+	//bubble sorting
+    for i in 0..array.len(){
+        let mut min =  array[i].clone();
+        let mut index = i;
+        for j in i..array.len(){
+            if array[j] < min {
+                index = j;
+                min = array[j].clone();
+            }
+        }
+        array.swap(i,index);
+    }
 }
 #[cfg(test)]
 mod tests {

@@ -28,7 +28,7 @@ impl Graph {
     fn bfs_with_return(&self, start: usize) -> Vec<usize> {
         let mut visit_order = vec![];
         // 广度优先搜索
-        let mut visited:   Vec<bool> = vec![false; self.adj.len()];
+        let mut visited:  Vec<bool> = vec![false; self.adj.len()];
         let mut queue:  VecDeque<usize> = VecDeque::new();
         queue.push_back(start);
         visited[start] = true;

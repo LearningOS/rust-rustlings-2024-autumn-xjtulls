@@ -2,7 +2,6 @@
 	heap
 	This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
 
 use std::cmp::Ord;
 use std::default::Default;
@@ -37,8 +36,23 @@ where
     }
 
     pub fn add(&mut self, value: T) {
-        //TODO
+        self.items.push(value);
+        self.count += 1;
+        self.heapify_up(self.count);
     }
+
+    fn heapify_up(&mut self, mut idx: usize) {
+        while idx > 1 {
+            let parent_idx = self.parent_idx(idx);
+            if (self.comparator)(&self.items[idx], &self.items[parent_idx]) {
+                self.items.swap(idx, parent_idx);
+                idx = parent_idx;
+            } else {
+                break;
+            }
+        }
+    }
+
 
     fn parent_idx(&self, idx: usize) -> usize {
         idx / 2
@@ -57,9 +71,31 @@ where
     }
 
     fn smallest_child_idx(&self, idx: usize) -> usize {
-        //TODO
-		0
+        if !self.children_present(idx) {
+            return 0; // No children present
+        }
+        let left_idx = self.left_child_idx(idx);
+        if self.right_child_idx(idx) > self.count {
+            return left_idx; // Only left child present
+        }
+        if (self.comparator)(&self.items[left_idx], &self.items[self.right_child_idx(idx)]) {
+            left_idx
+        } else {
+            self.right_child_idx(idx)
+        }
     }
+    fn heapify_down(&mut self, mut idx: usize) {
+        while self.children_present(idx) {
+            let child_idx = self.smallest_child_idx(idx);
+            if (self.comparator)(&self.items[child_idx], &self.items[idx]) {
+                self.items.swap(idx, child_idx);
+                idx = child_idx;
+            } else {
+                break;
+            }
+        }
+    }
+
 }
 
 impl<T> Heap<T>
@@ -79,13 +115,21 @@ where
 
 impl<T> Iterator for Heap<T>
 where
-    T: Default,
+    T: Default + Clone,
 {
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
-        //TODO
-		None
+        if self.is_empty() {
+            return None;
+        }
+        let root = self.items[1].clone();
+        self.items[1] = self.items.pop().unwrap_or_default();
+        self.count -= 1;
+        if self.count > 0 {
+            self.heapify_down(1);
+        }
+        Some(root)
     }
 }
 

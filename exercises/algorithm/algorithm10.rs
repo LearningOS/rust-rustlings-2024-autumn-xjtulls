@@ -28,7 +28,15 @@ impl Graph for UndirectedGraph {
         &self.adjacency_table
     }
     fn add_edge(&mut self, edge: (&str, &str, i32)) {
-        //TODO
+        let (from_node, to_node, weight) = edge;
+        self.adjacency_table
+        .entry(from_node.to_string())
+        .or_insert(Vec::new())
+        .push((to_node.to_string(), weight));
+        self.adjacency_table
+        .entry(to_node.to_string())
+        .or_insert(Vec::new())
+        .push((from_node.to_string(), weight));
     }
 }
 pub trait Graph {
